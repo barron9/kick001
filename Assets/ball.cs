@@ -59,7 +59,7 @@ public class ball : MonoBehaviour
                     break;
                 case TouchPhase.Moved:
                     presstime += 7f;
-                    GetComponent<LineRenderer>().SetPosition(1, new Vector3(-(-cam.WorldToScreenPoint(transform.position).x+touch.position.x)/10,2, -(-cam.WorldToScreenPoint(transform.position).y+touch.position.y)/10));
+                    GetComponent<LineRenderer>().SetPosition(1, new Vector3(-(-cam.WorldToScreenPoint(transform.position).x+touch.position.x)/10,2.5f, -(-cam.WorldToScreenPoint(transform.position).y+touch.position.y)/10));
 
                     break;
 

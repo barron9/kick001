@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class game : MonoBehaviour
+public class score : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -14,7 +13,13 @@ public class game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-     
+        
+    }
+
+    void OnTriggerEnter(Collider col) {
+       
+            SceneManager.LoadScene("1", LoadSceneMode.Single);
+        
 
     }
 }
