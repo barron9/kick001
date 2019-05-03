@@ -1,19 +1,37 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ball : MonoBehaviour
 {
-    float presstime = 0f;
+    private float presstime = 0f;
     // Start is called before the first frame update
     private Camera cam;
+    public GameObject opponent;
 
-    void Start()
+    private void Start()
     {
+
         cam = Camera.main;
+        StartCoroutine("generate");
     }
-    void OnGUI()
+
+    private IEnumerator generate()
+    {
+        while (true)
+        {
+            opponent = Instantiate(opponent, new Vector3(0, 2, 0), Quaternion.identity);
+            opponent.GetComponent<Rigidbody>().AddForce(new Vector3(-.5f, 1, -.5f), ForceMode.Impulse);
+
+            yield return new WaitForSeconds(2.2f);
+            Object.Destroy(opponent, 5f);
+
+        }
+
+    }
+
+    private void OnGUI()
     {
         Vector3 point = new Vector3();
         Event currentEvent = Event.current;
@@ -33,9 +51,11 @@ public class ball : MonoBehaviour
         GUILayout.EndArea();
 
     }
-        // Update is called once per frame
-        void Update()
+
+    // Update is called once per frame
+    private void Update()
     {
+        GameObject.FindGameObjectWithTag("ballonair").GetComponent<Text>().text = presstime.ToString();
         if (transform.position.y < -10)
         {
             SceneManager.LoadScene("1", LoadSceneMode.Single);
@@ -44,7 +64,7 @@ public class ball : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
             // Handle finger movements based on touch phase.
-            GetComponent<LineRenderer>().SetPosition(0,transform.position);
+            GetComponent<LineRenderer>().SetPosition(0, transform.position);
             switch (touch.phase)
             {
                 // Record initial touch position.
@@ -59,15 +79,16 @@ public class ball : MonoBehaviour
                     break;
                 case TouchPhase.Moved:
                     presstime += 7f;
-                    GetComponent<LineRenderer>().SetPosition(1, new Vector3(-(-cam.WorldToScreenPoint(transform.position).x+touch.position.x)/10,2.5f, -(-cam.WorldToScreenPoint(transform.position).y+touch.position.y)/10));
+                    GetComponent<LineRenderer>().SetPosition(1, new Vector3(-(-cam.WorldToScreenPoint(transform.position).x + touch.position.x) / 10, transform.position.y, -(-cam.WorldToScreenPoint(transform.position).y + touch.position.y) / 10));
 
                     break;
 
                 // Report that a direction has been chosen when the finger is lifted.
                 case TouchPhase.Ended:
+                    presstime = 0f;
                     GetComponent<LineRenderer>().enabled = false;
 
-                    GetComponent<Rigidbody>().AddForce(new Vector3(-(-cam.WorldToScreenPoint(transform.position).x + touch.position.x) / 2, presstime/90, -(-cam.WorldToScreenPoint(transform.position).y + touch.position.y) / 2),ForceMode.Impulse);
+                    GetComponent<Rigidbody>().AddForce(new Vector3(-(-cam.WorldToScreenPoint(transform.position).x + touch.position.x) / 2, presstime * 5, -(-cam.WorldToScreenPoint(transform.position).y + touch.position.y) / 2), ForceMode.Impulse);
                     break;
             }
         }

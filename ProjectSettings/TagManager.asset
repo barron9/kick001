@@ -6,6 +6,8 @@ TagManager:
   tags:
   - ball
   - score
+  - opp
+  - ballonair
   layers:
   - Default
   - TransparentFX
